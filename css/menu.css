@@ -1,0 +1,88 @@
+ol, ul {list-style: none;}
+ul.cssTabs{
+	background: #848383;
+	border:solid 1px #606060;
+	width: auto;
+	color:#333;
+	font-size:12px;
+	font-weight:bold;
+	background:-moz-linear-gradient(0% 100% 90deg,#737373, #9a9a9a);
+	background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#9a9a9a), to(#737373));
+	box-shadow: inset 0 1px 0 0 #dfdfdf;
+	-moz-box-shadow: inset 0 1px 0 0 #dfdfdf;
+	-webkit-box-shadow: inset 0 1px 0 0 #dfdfdf;
+}
+ul.cssTabs > li a {
+	color:#fff;
+	text-shadow:0px 0px 2px #333;
+}
+ul.cssTabs > li a:hover {
+	color:#333;
+	text-shadow:0px 0px 1px #fff;
+}
+ul.cssTabs > li {
+	background:#989898;
+	color:#333;
+	border:solid 1px #606060;	
+	border-bottom:0;	
+	display: inline-block;
+	margin: 10px 1px -1px;
+	padding: 8px 10px;
+	background:-moz-linear-gradient(0% 100% 90deg,#9a9a9a, #888888);
+	background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#888888), to(#9a9a9a));
+	box-shadow: inset 0 1px 0 0 #dfdfdf;
+	-moz-box-shadow: inset 0 1px 0 0 #dfdfdf;
+	-webkit-box-shadow: inset 0 1px 0 0 #dfdfdf;
+}
+
+ul.cssTabs > span {
+	background:none;
+	color:#fff;	
+	border-bottom:0;	
+	display: inline-block;
+	margin: 10px 1px -1px;
+	padding: 8px 10px;
+}
+
+ul.cssTabs > li.active,ul.cssTabs > li:hover {
+	background:#ededed;
+	color:#333;
+	background:-moz-linear-gradient(0% 100% 90deg,#f0f0f0, #d1d1d1) !important;
+	background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#d1d1d1), to(#f0f0f0)) !important;
+	box-shadow: inset 0 1px 0 0 #fff;
+	-moz-box-shadow: inset 0 1px 0 0 #fff;
+	-webkit-box-shadow: inset 0 1px 0 0 #fff;	
+	text-shadow: none;
+	cursor:pointer;
+}
+
+ul.cssTabs.orange{
+	background: #d75125;
+	border-color:#9c2c09;
+	color:#333;
+	background:-moz-linear-gradient(0% 100% 90deg,#d44b22, #ea753d);
+	background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#ea753d), to(#d44b22));
+	box-shadow: inset 0 1px 0 0 #f5b497;
+	-moz-box-shadow: inset 0 1px 0 0 #f5b497;
+	-webkit-box-shadow: inset 0 1px 0 0 #f5b497;
+}
+ul.cssTabs.orange > li, ul.cssTabs.orange > li:hover {
+	background:#e1693e;
+	color:#333;
+	border-color:#9c2c09;
+	background:-moz-linear-gradient(0% 100% 90deg,#e47a48, #dd5733);
+	background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#dd5733), to(#e47a48));
+	text-shadow: none;
+	box-shadow: inset 0 1px 0 0 #f5b497;
+	-moz-box-shadow: inset 0 1px 0 0 #f5b497;
+	-webkit-box-shadow: inset 0 1px 0 0 #f5b497;
+}
+
+ul.cssTabs.orange > li.active {
+	box-shadow: inset 0 1px 0 0 #fff;
+	-moz-box-shadow: inset 0 1px 0 0 #fff;
+	-webkit-box-shadow: inset 0 1px 0 0 #fff;	
+	text-shadow: none;
+}
+::-webkit-input-placeholder	{ color:#ccc; }
+input:-moz-placeholder { color:#ccc; }
