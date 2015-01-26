@@ -1,0 +1,200 @@
+#Proses
+1. BUku Manual
+2. HPP
+
+
+	function hppget_data_pembayaranhpp_1($idhpp) {
+		$this->db->select('hpp_tanah.*');
+		$this->db->select('data_kavling.nama AS namakavling');
+		$this->db->select('data_kota.judul_kota AS namakota,data_kota.kode_kota');
+		$this->db->select('data_perumahan.judul_perum AS namaperum,data_perumahan.kode_perum');
+		$this->db->select('adm_project.kode_project AS kode_project');
+		$this->db->join('data_kavling','data_kavling.idkavling = hpp_tanah.idkavling');
+		$this->db->join('data_perumahan','data_perumahan.idperum = data_kavling.idperum');
+		$this->db->join('adm_project','adm_project.idproject = data_perumahan.idproject');
+		$this->db->join('data_kota','data_kota.idkota = adm_project.idkota');		
+		$this->db->where('data_kavling.idperum',$this->session->userdata('idperum'));
+		$this->db->where('data_perumahan.idperum',$this->session->userdata('idperum'));
+		$this->db->where('hpp_tanah.tempurl',$idhpp);
+		$this->db->where('hpp_tanah.idperum',$this->session->userdata('idperum'));
+		return $this->db->get($this->hpp_tanah);
+	}
+	function hppget_all_data_pembayaranhpp_1($idbayar) {
+		$this->db->select('pembayaran_hpp.*');
+		$this->db->select('hpp_tanah.*');
+		$this->db->select('data_kavling.nama AS namakavling');
+		$this->db->select('data_kota.judul_kota AS namakota,data_kota.kode_kota');
+		$this->db->select('data_perumahan.judul_perum AS namaperum,data_perumahan.kode_perum');
+		$this->db->select('adm_project.kode_project AS kode_project');
+		$this->db->join('data_kavling','data_kavling.idkavling = hpp_tanah.idkavling');
+		$this->db->join('data_perumahan','data_perumahan.idperum = data_kavling.idperum');
+		$this->db->join('adm_project','adm_project.idproject = data_perumahan.idproject');
+		$this->db->join('data_kota','data_kota.idkota = adm_project.idkota');		
+		$this->db->where('data_kavling.idperum',$this->session->userdata('idperum'));
+		$this->db->where('data_perumahan.idperum',$this->session->userdata('idperum'));
+		$this->db->join('pembayaran_hpp','pembayaran_hpp.idata=hpp_tanah.idata');
+		$this->db->where('hpp_tanah.idata',$idbayar);
+		$this->db->where('pembayaran_hpp.kode_hpp','hpp1');
+		$this->db->where('hpp_tanah.idperum',$this->session->userdata('idperum'));
+		return $this->db->get($this->hpp_tanah);
+	}
+	function hppget_all_data_pembayaranhpp_1_lunas($idbayar) {
+		$this->db->select('pembayaran_hpp.*');
+		$this->db->select('hpp_tanah.*');
+		$this->db->select('data_kavling.nama AS namakavling');
+		$this->db->select('data_kota.judul_kota AS namakota,data_kota.kode_kota');
+		$this->db->select('data_perumahan.judul_perum AS namaperum,data_perumahan.kode_perum');
+		$this->db->select('adm_project.kode_project AS kode_project');
+		$this->db->join('data_kavling','data_kavling.idkavling = hpp_tanah.idkavling');
+		$this->db->join('data_perumahan','data_perumahan.idperum = data_kavling.idperum');
+		$this->db->join('adm_project','adm_project.idproject = data_perumahan.idproject');
+		$this->db->join('data_kota','data_kota.idkota = adm_project.idkota');		
+		$this->db->where('data_kavling.idperum',$this->session->userdata('idperum'));
+		$this->db->where('data_perumahan.idperum',$this->session->userdata('idperum'));
+		$this->db->join('pembayaran_hpp','pembayaran_hpp.idata=hpp_tanah.idata');
+		$this->db->where('hpp_tanah.idata',$idbayar);
+		$this->db->where('hpp_tanah.kode_hpp','hpp1');
+		$this->db->where('pembayaran_hpp.hppstatus','lunas');
+		$this->db->where('hpp_tanah.idperum',$this->session->userdata('idperum'));
+		return $this->db->get($this->hpp_tanah);
+	}
+	
+	
+		$this->db->select('data_kota.kode_kota, data_kota.judul_kota');
+		$this->db->join('data_kota.idkota = adm_project.idkota','left');
+		$this->db->select('adm_project.kode_project, adm_project.judul');
+		$this->db->join('adm_project.idproject = data_perumahan.idproject','left');
+		$this->db->select('data_perumahan.kode_perum, data_perumahan.judul_perum');
+		//$this->db->join('adm_menu','adm_menu.idmenu = adm_menurole.idmenu','left');
+		
+		include("plug/fungsi.php");
+		<th><h3>Kavling</h3></th>
+		<td align="center"><?php echo namakavling($ted->idkavling);?></td>
+		
+	echo "<tr><td width=\"200\">Kavling</td><td style='background:pink'><input type='text' id='formkavling' name='formkavling' placeholder='Ketik 2 huruf dan Pilih'>
+	<input type='hidden' id='id_kavling' name='idkavling'/>
+	<input type='hidden' id='trackkavling' /></td></tr>";
+	
+	<td align="center"><?php echo date("d-m-Y", strtotime($ted->tanggal));?></td>
+	
+	$nkv=namakavling($terima->idkavling);
+	echo "<tr><td width=\"200\">Kavling</td><td style='background:pink'>
+	<input type='text' id='formkavling' name='formkavling' placeholder='Ketik 2 huruf dan Pilih' value='$nkv'>
+	<input type='hidden' id='id_kavling' name='idkavling' value='$terima->idkavling'/>
+	<input type='hidden' id='trackkavling' /></td></tr>";
+	
+	<td align="center"><?php echo namaIDpegawai($ted->legal);?></td>
+                    <td align="center"><?php echo namaUserpegawai($ted->akunting);?></td>
+                    <td align="center"><?php echo namaUserpegawai($ted->pimpinan);?></td>
+	
+	echo "<tr><td width=\"200\">Nama Administrasi</td><td>
+	<input type='hidden' id='track_id' name='legal'/>
+	<input type='hidden' id='tracknama' />
+	".form_input(array('name'=>'marketing','placeholder'=>'Nama Administrasi - Ketik 2 huruf  dan Pilih','id'=>'tracknamauser'),set_value('marketing')). "</td></tr>";
+	
+
+	echo "<tr><td width=\"200\">Nama Administrasi</td><td>
+	<input type='hidden' id='track_id' name='legal' value='$terima->legal'/>
+	<input type='hidden' id='tracknama' />
+	".form_input(array('name'=>'marketing','placeholder'=>'Nama Administrasi - Ketik 2 huruf  dan Pilih','id'=>'tracknamauser'),namaIDpegawai($terima->legal)). "</td></tr>";
+	
+		$this->db->select('data_kavling.*');
+		$this->db->select('data_kota.kode_kota, data_kota.judul_kota AS kota');
+		$this->db->select('adm_project.kode_project, adm_project.judul AS namaproject');
+		$this->db->select('data_perumahan.judul_perum AS namaperum');
+		$this->db->join('adm_project','data_kota.idkota = adm_project.idkota');
+		$this->db->join('data_perumahan','adm_project.idproject = data_perumahan.idproject');
+		$this->db->join('data_kavling','data_perumahan.idperum = data_kavling.idperum');
+		return $this->db->get($this->data_kota); 
+		
+		if(!$this->input->post('submit_form')){
+				if($data['nopsjb'] == FALSE){redirect('/operasional/perjanjian_sementara_informasi');}
+			}else
+		
+		if(!$this->input->post('submit_form')){
+				if($data['noppjb'] == FALSE){redirect('/operasional/perjanjian_pendahuluan_informasi');}
+			}else
+			
+		if($rppjb['noppjb'] == FALSE) {
+			redirect('/operasional/kbk_informasi');
+		}
+		
+		$this->db->select('ppjb.*');
+		$this->db->distinct('ppjb.idppjb');
+		$this->db->select('spmb.nilaikbk AS nilaikbk');
+		$this->db->select('ppjb.totalkpr AS totalkpr');
+		$this->db->select('ppjb.hargasepakat AS hargasepakat');
+		$this->db->select('ppjb.tandajadi AS tandajadi');
+		$this->db->select('ppjb.carabayar AS carabayar');
+		$this->db->select('ppjb.luasatanah_t AS luastanah_t');
+		$this->db->select('ppjb.luasbangunan_t AS luasbangunan_t');
+		$this->db->select('data_kavling.luastanah AS luastanah');
+		$this->db->select('data_kavling.harga AS harga');
+		$this->db->select('data_kavling.luasbangunan AS luasbangunan');
+		$this->db->select('data_bank.namabank AS namabank');
+		$this->db->join('data_bank','data_bank.idbank=ppjb.idbank');		
+		$this->db->select('data_kavling.nama AS namakavling');
+		$this->db->select('data_kota.judul_kota AS namakota,data_kota.kode_kota');
+		$this->db->select('data_perumahan.judul_perum AS namaperum,data_perumahan.kode_perum');
+		$this->db->select('adm_project.kode_project AS kode_project');
+		
+		include("plug/fungsi.php");
+		namaUserpegawai
+		date("d-m-Y",strtotime(
+		
+		
+		<?php
+include("plug/indonesia_date.php");
+include("plug/terbilang.php");
+include("plug/fungsi.php");
+$user=$this->session->userdata('your_id');
+$dt=mysql_query("SELECT adm_user.realname,adm_project.judul AS namapt, data_perumahan.judul_perum AS namaperumahan  FROM adm_user INNER JOIN data_perumahan ON (adm_user.idperum = data_perumahan.idperum) INNER JOIN adm_project ON (data_perumahan.idproject=adm_project.idproject) WHERE username='$user'");
+$r=mysql_fetch_array($dt);
+$namacetak = $r['realname'];
+$namapt=$r['namapt'];
+$namaperum =$r['namaperumahan'];
+$tglcetak = nama_hari(date('l')).", ".date("d")." ".nama_bulan(date("m"))." ".date("Y H:i:s A");
+
+
+$mpdf->SetHeader('DOKUMEN AJB| *'.strtoupper($namapt).'* |Halaman {PAGENO}/{nb}');
+$mpdf->SetFooter($tglcetak.'|'.strtoupper($namaperum).'| Dicetak Oleh : '.$namacetak);
+
+$mpdf->WriteHTML("<h2>LAPORAN AJB</h2>");
+$mpdf->WriteHTML("<table border='0' width='100%'><tr><td width='33%'>Perusahaan: ".$namapt."</td><td width='33%'>Perumahan: ".$namaperum."</td><td width='33%' align='right'>Periode: ".$tglaw." s/d ".$tglak."</td></tr></table><br/>");
+		
+		$this->db->join('spmb','spmb.idppjb=ppjb.idppjb');
+		$this->db->join('data_kavling','data_kavling.idkavling = ppjb.idkavling');
+		$this->db->join('data_perumahan','data_perumahan.idperum = data_kavling.idperum');
+		$this->db->join('adm_project','adm_project.idproject = data_perumahan.idproject');
+		$this->db->join('data_kota','data_kota.idkota = adm_project.idkota');
+		
+		$this->db->select('ppjb.*');
+		$this->db->distinct('ppjb.idppjb');
+		$this->db->select('data_kavling.nama AS namakavling');
+		$this->db->select('data_kota.judul_kota AS namakota,data_kota.kode_kota');
+		$this->db->select('data_perumahan.judul_perum AS namaperum,data_perumahan.kode_perum');
+		$this->db->select('adm_project.kode_project AS kode_project');
+		$this->db->join('data_kavling','data_kavling.idkavling = ppjb.idkavling');
+		$this->db->join('data_perumahan','data_perumahan.idperum = data_kavling.idperum');
+		$this->db->join('adm_project','adm_project.idproject = data_perumahan.idproject');
+		$this->db->join('data_kota','data_kota.idkota = adm_project.idkota');
+		$this->db->where('data_perumahan.idperum',$this->session->userdata('idperum'));
+		$this->db->where('data_kavling.idperum',$this->session->userdata('idperum'));
+		
+		$this->form_validation->set_error_delimiters('<span style="color : red; padding-left:5px;">', '</span>');
+			$this->form_validation->set_rules('pemesan', 'pemesan', 'required');
+			$this->form_validation->set_rules('hp', 'HP', 'required|numeric');
+			$this->form_validation->set_message('required', 'Harus diisi');
+			$this->form_validation->set_message('numeric', 'Harus angka');
+			if ($this->form_validation->run()==TRUE) {
+			
+			
+			}else{
+				echo "<script>alert('Maaf,data ada yang belum terisi keseluruhan. Mohon di isi kembali dengan lengkap!');</script>
+				<meta http-equiv='refresh' content='0; url=".base_url()."operasional/perjanjian_pendahuluan_informasi'>";
+			}
+		
+		
+		
+		
+		<iframe src="http://www.jne.co.id/index.php?mib=tracking.detail&awb=DPKB101024535513" style="position: relative; left: -100px; top: -100px">
