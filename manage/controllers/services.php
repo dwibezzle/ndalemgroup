@@ -25,6 +25,7 @@ class Services extends CI_Controller {
         echo $ret;
         die();
     } 
+    // http://localhost:8080/ndalemgroup/services/piutang_konsumen/001
 
     function piutang_borongan_kavling($idkbk=null)
     {
@@ -44,6 +45,7 @@ class Services extends CI_Controller {
         echo $ret;
         die();
     }  
+    // http://localhost:8080/ndalemgroup/services/piutang_borongan_kavling/001
 
     function piutang_borongan_falum($idkbf=null)
     {
@@ -62,6 +64,7 @@ class Services extends CI_Controller {
         echo $ret;
         die();
     } 
+    // http://localhost:8080/ndalemgroup/services/piutang_borongan_falum/001
 
     function piutang_borongan_lain($id_hutang_lain=null)
     {
@@ -79,5 +82,6 @@ class Services extends CI_Controller {
         echo $ret;
         die();
     }    
+    // http://localhost:8080/ndalemgroup/services/piutang_borongan_lain/2
 }
 ?>
