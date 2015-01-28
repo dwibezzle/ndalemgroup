@@ -760,7 +760,6 @@ class Laporan extends CI_Controller {
         $this->db->where('pembayaran_ppjb.idppjb',$idppjb);
         $this->db->group_by('pembayaran_ppjb.tanggal');
         $data['te']=$this->db->get('pembayaran_ppjb')->result();
-        echo '<pre>'; echo $this->db->last_query(); exit();
         //echo "<pre>";print_r($data['tt']);exit();
         $this->load->view('laporan/piutang/detail2',$data);
     }
@@ -847,6 +846,7 @@ class Laporan extends CI_Controller {
                         $this->db->where('hutang_lain.id_hutang_lain',$id_hutang_lain);
 
         $gut= $this->db->get('pembayaran_hutang_lain');
+        echo '<pre>'; echo $this->db->last_query(); exit();
         $data['cek']     = $gut->row();
         $data['rencana'] = $gut->result();
                            
@@ -888,6 +888,7 @@ class Laporan extends CI_Controller {
                            $this->db->where_in('pembayaran_kbf.status',array('lunas','proses'));
                            $this->db->order_by('pembayaran_kbf.target','ASC');
         $data['terbayar']= $this->db->get('pembayaran_kbf')->result();
+        // echo '<pre>'; echo $this->db->last_query(); exit();
     
         $this->load->view('laporan/hutang/cetak_kbf',$data);
     }
@@ -928,10 +929,12 @@ class Laporan extends CI_Controller {
                         $this->db->where('kbk.idkbk',$idkbk);
 
         $gut= $this->db->get('pembayaran_kbk');
+
+
         $data['cek']     = $gut->row();
         $data['rencana'] = $gut->result();
-/*echo "<pre>";print_r($data['cek']);exit();
-*/                           /*$this->db->select('pembayaran_kbk.pimpinan,pembayaran_kbk.tglapprove,pembayaran_kbk.jumlah');*/
+        // echo "<pre>";print_r($data['cek']);exit();
+      /*$this->db->select('pembayaran_kbk.pimpinan,pembayaran_kbk.tglapprove,pembayaran_kbk.jumlah');*/
                            
 
                            $this->db->where('pembayaran_kbk.idkbk',$idkbk);
