@@ -1,6 +1,12 @@
 <?php
 class Services extends CI_Controller {
     private $menu ;
+    private $userkey = "hctk4m";
+    private $passkey = "muach";
+    private $telepon = "081329302424";
+    private $pesan = "bolehlah dicoba sekali lagi";
+
+
     public function __construct()
        {
             parent::__construct();
@@ -81,6 +87,36 @@ class Services extends CI_Controller {
 
         echo $ret;
         die();
+    }
+
+    //cara 1
+    function sent_sms()
+    {
+        $url = "https://reguler.zenziva.net/apps/smsapi.php?userkey=$this->userkey&passkey=$this->passkey&nohp=$this->telepon&pesan=$this->pesan";
+        $test = file_get_contents($url);
+        echo ($test);
+        //header('Location: '.$url);
+    }
+
+    //cara 2| recomended!
+    function sent_sms2()
+    {
+        $url = "https://reguler.zenziva.net/apps/smsapi.php";
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, 'userkey='.$this->userkey.'&passkey='.$this->passkey.'&nohp='.$this->telepon.'&pesan='.urlencode($this->pesan));
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_TIMEOUT,30);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        $results = curl_exec($ch);
+
+        print_r($results);
+
+
+        curl_close($ch);
+
     }    
     // http://localhost:8080/ndalemgroup/services/piutang_borongan_lain/2
 }
