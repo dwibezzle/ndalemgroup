@@ -3,9 +3,17 @@ class Services extends CI_Controller {
     private $menu ;
     private $userkey = "hctk4m";
     private $passkey = "muach";
-    private $telepon = "081329302424";
+    // private $telepon = "081329302424";
+    private $telepon = "085743901609";
     private $pesan = "bolehlah dicoba sekali lagi";
-
+    
+    /*
+    skema proses script smsnya : 
+    1. buat script yg dapat execute otomatis tiap harinya yg akan mengecek tanggal dari data web service.
+    2. dalam script, pertama, load data konsumen beserta jatuh temponya dengan mengakses web service dari url fungsi di atas
+    3. baca data konsumen dengan perulangan dan pengecekan tanggalnya.
+    4. jika tanggal sesuai, execute fungsi sent_sms pada konsumen tersebut dengan format sms yg ditentukan.
+    */
 
     public function __construct()
        {
@@ -20,6 +28,12 @@ class Services extends CI_Controller {
         exit();
     }
 
+    /**
+    * @since    2015
+    * @task     1
+    * @usedfor  hasilnya berupa data piutang konsumen tertentu beserta jatuh tempo pembayarannya
+    */    
+    // contoh ==> http://localhost:8080/ndalemgroup/services/piutang_konsumen/001
     function piutang_konsumen($idppjb=null)
     {
         $this->db->join('ppjb','pembayaran_ppjb.idppjb=ppjb.idppjb');
@@ -31,8 +45,19 @@ class Services extends CI_Controller {
         echo $ret;
         die();
     } 
-    // http://localhost:8080/ndalemgroup/services/piutang_konsumen/001
 
+
+
+    /*fungsi di bawah ini untuk task 3
+    pada task 3 terdapat 3 jenis yakni piutang borongan kavling, piutang borongan fasilitas umum
+    dan piutang borongan lain-lain*/
+
+    /**
+    * @since    2015
+    * @task     3
+    * @usedfor  hasilnya berupa data piutang terhadap pemborong tertentu pada jenis kavling beserta jatuh tempo pembayarannya
+    */  
+    // contoh url ==> http://localhost:8080/ndalemgroup/services/piutang_borongan_kavling/001
     function piutang_borongan_kavling($idkbk=null)
     {
         $this->db->join('kbk','pembayaran_kbk.idkbk=kbk.idkbk');
@@ -51,8 +76,14 @@ class Services extends CI_Controller {
         echo $ret;
         die();
     }  
-    // http://localhost:8080/ndalemgroup/services/piutang_borongan_kavling/001
+    
 
+    /**
+    * @since    2015
+    * @task     3
+    * @usedfor  hasilnya berupa data piutang terhadap pemborong tertentu pada jenis fasilitas umum beserta jatuh tempo pembayarannya
+    */ 
+    // contoh url ==> http://localhost:8080/ndalemgroup/services/piutang_borongan_falum/001
     function piutang_borongan_falum($idkbf=null)
     {
         $this->db->join('kbf','pembayaran_kbf.idkbf=kbf.idkbf');
@@ -70,8 +101,14 @@ class Services extends CI_Controller {
         echo $ret;
         die();
     } 
-    // http://localhost:8080/ndalemgroup/services/piutang_borongan_falum/001
 
+
+    /**
+    * @since    2015
+    * @task     3
+    * @usedfor  hasilnya berupa data piutang terhadap pemborong tertentu pada jenis lainnya beserta jatuh tempo pembayarannya
+    */ 
+    // contoh url ==> http://localhost:8080/ndalemgroup/services/piutang_borongan_lain/2
     function piutang_borongan_lain($id_hutang_lain=null)
     {
         // $this->db->select('id_bayar, tgl_rencana, jumlah');
@@ -117,7 +154,8 @@ class Services extends CI_Controller {
 
         curl_close($ch);
 
-    }    
-    // http://localhost:8080/ndalemgroup/services/piutang_borongan_lain/2
+    }
+
+
 }
 ?>
