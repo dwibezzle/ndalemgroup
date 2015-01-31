@@ -40,6 +40,7 @@ class Services extends CI_Controller {
         $this->db->where('pembayaran_ppjb.idppjb',$idppjb);
         $this->db->group_by('pembayaran_ppjb.tanggal');
         $data['te']=$this->db->get('pembayaran_ppjb')->result_array();
+        // echo '<pre>'; echo $this->db->last_query(); exit();
         $ret = json_encode($data['te']);
 
         echo $ret;
@@ -71,6 +72,7 @@ class Services extends CI_Controller {
         $this->db->where('pembayaran_kbk.status',"Hutang");
 
         $gut= $this->db->get('pembayaran_kbk')->result_array();
+        // echo '<pre>'; echo $this->db->last_query(); exit();
         $ret = json_encode($gut);
 
         echo $ret;
@@ -96,6 +98,7 @@ class Services extends CI_Controller {
         // $this->db->where('status',"Hutang");
         $this->db->order_by('pembayaran_kbf.target','ASC');
         $gut= $this->db->get('pembayaran_kbf')->result_array();
+        // echo '<pre>'; echo $this->db->last_query(); exit();
         $ret = json_encode($gut);
 
         echo $ret;
@@ -120,6 +123,7 @@ class Services extends CI_Controller {
         $this->db->where('status',"Hutang");
 
         $gut= $this->db->get('pembayaran_hutang_lain')->result_array();
+        // echo '<pre>'; echo $this->db->last_query(); exit();
         $ret = json_encode($gut);
 
         echo $ret;

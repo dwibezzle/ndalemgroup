@@ -846,7 +846,7 @@ class Laporan extends CI_Controller {
                         $this->db->where('hutang_lain.id_hutang_lain',$id_hutang_lain);
 
         $gut= $this->db->get('pembayaran_hutang_lain');
-        echo '<pre>'; echo $this->db->last_query(); exit();
+        // echo '<pre>'; echo $this->db->last_query(); exit();
         $data['cek']     = $gut->row();
         $data['rencana'] = $gut->result();
                            
