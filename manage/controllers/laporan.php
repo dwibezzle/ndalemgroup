@@ -533,7 +533,8 @@ class Laporan extends CI_Controller {
         {
             $this->db->where('ppjb.idperum',$this->session->userdata('idperum'));
         }
-        $data['list']=$this->db->get('pembayaran_ppjb')->result();
+        $data['list']=$this->db->get('pembayaran_ppjb')->result();        
+        // echo '<pre>'; echo $this->db->last_query(); exit();
         $this->load->view('laporan/piutang/view2',$data);
         $this->load->view('footer');
     }
@@ -748,10 +749,7 @@ class Laporan extends CI_Controller {
         $this->db->where('pembayaran_ppjb.idppjb',$idppjb);
         $this->db->order_by('penerimaan.tanggal_bayar','ASC');
         $det=$this->db->get('penerimaan');
-        // Clear any existing output (optional) ob_clean(); 
-        // echo '<pre>'; echo $this->db->last_query(); 
-        // Stop PHP from doing anything else (optional) 
-        // exit(); 
+
         $data['cek'] = $det->row();
         $data['li']  = $det->result();
 
@@ -760,7 +758,7 @@ class Laporan extends CI_Controller {
         $this->db->where('pembayaran_ppjb.idppjb',$idppjb);
         $this->db->group_by('pembayaran_ppjb.tanggal');
         $data['te']=$this->db->get('pembayaran_ppjb')->result();
-        //echo "<pre>";print_r($data['tt']);exit();
+        echo "<pre>";print_r($data['te']);exit();
         $this->load->view('laporan/piutang/detail2',$data);
     }
     function jumlah_dp($idppjb=null)

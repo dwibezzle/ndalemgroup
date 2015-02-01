@@ -25,25 +25,67 @@ class Services extends CI_Controller {
        
     public function index()
     {    
+        echo "testing testing";
         exit();
     }
 
     /**
     * @since    2015
     * @task     1
-    * @usedfor  hasilnya berupa data piutang konsumen tertentu beserta jatuh tempo pembayarannya
+    * @usedfor  hasilnya berupa data piutang konsumen beserta jatuh tempo pembayarannya
     */    
-    // contoh ==> http://localhost:8080/ndalemgroup/services/piutang_konsumen/001
+    // contoh ==> http://localhost:8080/ndalemgroup/services/piutang_konsumen
     function piutang_konsumen($idppjb=null)
     {
-        $this->db->join('ppjb','pembayaran_ppjb.idppjb=ppjb.idppjb');
+        $query = $this->db->query("
+            SELECT
+                pp.`idppjb`,
+                pemesan,
+                namasertifikat,
+                hargasepakat,
+                hp,
+                carabayar,
+                pp.tanggal,
+                administrasi,
+                pimpinan
+            FROM `pembayaran_ppjb` p 
+            LEFT JOIN `ppjb` pp ON p.`idppjb` = pp.`idppjb`
+            LEFT JOIN `data_perumahan` dp ON pp.`idperum` = dp.`idperum`
+            LEFT JOIN `data_kavling` dk ON pp.`idkavling`= dk.`idkavling`
+            WHERE pp.`status` =  'dom'
+            AND pp.`pimpinan` != 'menunggu'
+            GROUP BY pp.`idppjb`
+        ");
+        $konsumen = $query->result_array();
+        if (!empty($konsumen)) {
+            $konsumen[$key]['data_piutang'] = array();
+            foreach ($konsumen as $key => $value) {
+                $id = $value["idppjb"];
+                $query2 = $this->db->query("
+                    SELECT 
+                        p.`idbayar`,
+                        p.`lunas`,
+                        p.`jumlah`,
+                        p.`tanggal`,
+                        p.`jenisbayar`
+                    FROM `pembayaran_ppjb` p
+                    LEFT JOIN `ppjb` pp ON p.`idppjb`=pp.`idppjb`
+                    WHERE p.`idppjb` = '$id' 
+                    AND p.`lunas` <> 'lunas'
+                    GROUP BY p.`tanggal`
+                ");
+                $konsumen[$key]['data_piutang'] = $query2->result_array();
+            }
+            
+        }
+
+        /*$this->db->join('ppjb','pembayaran_ppjb.idppjb=ppjb.idppjb');
         $this->db->where('pembayaran_ppjb.idppjb',$idppjb);
         $this->db->group_by('pembayaran_ppjb.tanggal');
         $data['te']=$this->db->get('pembayaran_ppjb')->result_array();
-        // echo '<pre>'; echo $this->db->last_query(); exit();
-        $ret = json_encode($data['te']);
+        $ret = json_encode($data['te']);*/
 
-        echo $ret;
+        echo json_encode($konsumen);
         die();
     } 
 
