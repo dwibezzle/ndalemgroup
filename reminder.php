@@ -1,36 +1,38 @@
 <?php
 
 // list var
-// $host = 'localhost';
-// $user = 'endsrezw_db';
-// $pass = 'xr{{~Fb8lnk%';
-$userkey = "hctk4m";
-$passkey = "muach";
-$telepon = "081329302424";
-$pesan = "terjadi gangguan";
-
 $host = 'localhost';
-$user = 'root';
-$pass = '';
+
+$user = 'endsrezw_db';
+$pass = 'abstraxerz27';
 $db = 'endsrezw_db';
+
+// $user = 'root';
+// $pass = '';
+// $db = 'endsrezw_dbv2';
+
+$userkey = "mn9134a";
+$passkey = "dx5wt4gvvr5";
+
+
+
 $con = null;
 
 //sms 
 function sms($userkey,$passkey,$telepon,$pesan)
 {
-	//echo $userkey.'-'.$passkey.'-'.$telepon.'-'.$pesan;
-	$url = "https://reguler.zenziva.net/apps/smsapi.php";
+	$url = "http://ekobudiprase.zenziva.com/apps/smsapi.php?tipe=reguler";
 	$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, 'userkey='.$userkey.'&passkey='.$passkey.'&nohp='.$telepon.'&pesan='.urlencode($pesan));
-		curl_setopt($ch, CURLOPT_HEADER, 0);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_TIMEOUT,30);
-		curl_setopt($ch, CURLOPT_POST, 1);
-		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-		$results = curl_exec($ch);
+	curl_setopt($ch, CURLOPT_URL, $url);
+	curl_setopt($ch, CURLOPT_POSTFIELDS, 'userkey='.$userkey.'&passkey='.$passkey.'&nohp='.$telepon.'&pesan='.urlencode($pesan));
+	curl_setopt($ch, CURLOPT_HEADER, 0);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+	curl_setopt($ch, CURLOPT_TIMEOUT,30);
+	curl_setopt($ch, CURLOPT_POST, 1);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+	$results = curl_exec($ch);
 
-		print_r($results);
+	print_r($results);
 	curl_close($ch);
 	
 }
@@ -63,12 +65,12 @@ function piutang($con, $userkey,$passkey)
 		      ) AS pesan,
 		      hp 
 		FROM
-		      endsrezw_db.`pembayaran_ppjb` p 
-		      LEFT JOIN endsrezw_db.`ppjb` pp 
+		      `pembayaran_ppjb` p 
+		      LEFT JOIN `ppjb` pp 
 		            ON p.`idppjb` = pp.`idppjb` 
-		      LEFT JOIN endsrezw_db.`data_perumahan` dp 
+		      LEFT JOIN `data_perumahan` dp 
 		            ON pp.`idperum` = dp.`idperum` 
-		      LEFT JOIN endsrezw_db.`data_kavling` dk 
+		      LEFT JOIN `data_kavling` dk 
 		            ON pp.`idkavling` = dk.`idkavling` 
 		WHERE pp.`status` = 'dom' 
 		      AND pp.`pimpinan` != 'menunggu' 
@@ -80,11 +82,14 @@ function piutang($con, $userkey,$passkey)
 		            OR DATE_ADD(CURDATE(), INTERVAL 3 DAY) = p.tanggal
 		      )
 	";
-	$result = $con->query($sql);
+	$sq = $con->prepare($sql);
+	$sq->execute();
+	$result = $sq->fetchAll();
+	// echo '<pre>'; print_r($result); echo '</pre>'; exit();
 	foreach ($result as $row)
     {
-    	print $row['pesan'] .' - '. $row['hp'] . '<br />';
-		// sms($userkey,$passkey,$row['hp'],$row['pesan']);
+    	// print $row['pesan'] .' - '. $row['hp'] . '<br />';
+		sms($userkey,$passkey,$row['hp'],$row['pesan']);
     }
 
 }
@@ -99,7 +104,7 @@ function get_user_hutang_pemborong($con, $id_perum){
         FROM adm_user u
         LEFT JOIN adm_role r ON u.`idrole` = r.`idrole`
         WHERE u.`idrole` = '2'
-        AND u.`idperum` = '1'
+        AND u.`idperum` = '$id_perum'
         AND u.`status` = 'active'
         )
         UNION
@@ -115,18 +120,22 @@ function get_user_hutang_pemborong($con, $id_perum){
         AND u.`status` = 'active'
         )
     ";
-	$result = $con->query($sql)->fetchAll();
+    $sq = $con->prepare($sql);
+	$sq->execute();
+	$result = $sq->fetchAll();
 
     return $result;
 }
 
-function sent_mes_to_managemnt($con, $userkey, $passkey, $id_perum, $jmlhari){
+function sent_mes_to_managemnt($con, $userkey, $passkey, $id_perum, $jmlhari, $tipe){
 	$data = get_user_hutang_pemborong($con, $id_perum);
-	$pesan = "Notifikasi hutang $jmlhari hari lagi segera dilunasi";
+	$isi_pesan = "hutang $tipe $jmlhari hari lagi segera dilunasi";
 	if (!empty($data)) {
 		foreach ($data as $a => $item) {
-			print $pesan .' - '. $item['telp'] . '<br />';
-			// sms($userkey,$passkey,$row['hp'],$row['pesan']);
+			$realname = $item['realname'];
+			$pesan = "Kepada saudara $realname ".$isi_pesan;
+			// print $realname .' - '. $tipe .' - '. $pesan .' - '. $item['telp'] . '<br />';
+			sms($userkey,$passkey,$item['telp'],$pesan);
 		}
 	}
 }
@@ -146,7 +155,9 @@ function piutang_borongan_kavling($con){
         FROM `kbk` k
         LEFT JOIN `data_perumahan` dp ON k.`idperum`= dp.`idperum`
     ";
-	$result = $con->query($sql)->fetchAll();
+    $sq = $con->prepare($sql);
+	$sq->execute();
+	$result = $sq->fetchAll();
 
     return $result;
 }
@@ -176,7 +187,9 @@ function data_hutang_piutang_borongan_kavling($con, $id){
         AND p.`status` =  'hutang'
         ORDER BY p.`target` ASC
     ";
-	$result = $con->query($sql)->fetchAll();
+    $sq = $con->prepare($sql);
+	$sq->execute();
+	$result = $sq->fetchAll();
 
     return $result;
 }
@@ -196,7 +209,9 @@ function piutang_borongan_falum($con){
 		FROM `kbf` k
 		JOIN `data_perumahan` dp ON k.`idperum` = dp.`idperum`
     ";
-	$result = $con->query($sql)->fetchAll();
+    $sq = $con->prepare($sql);
+	$sq->execute();
+	$result = $sq->fetchAll();
 
     return $result;
 }
@@ -225,7 +240,9 @@ function data_hutang_piutang_borongan_falum($con, $id){
 		WHERE `kbf`.`idkbf` =  '$id'
 		ORDER BY p.`target` ASC
     ";
-	$result = $con->query($sql)->fetchAll();
+    $sq = $con->prepare($sql);
+	$sq->execute();
+	$result = $sq->fetchAll();
 
     return $result;
 }
@@ -246,7 +263,9 @@ function piutang_borongan_lain($con){
 		FROM `hutang_lain` h
 		JOIN `data_perumahan` dp ON h.`id_perum` = dp.`idperum`
     ";
-	$result = $con->query($sql)->fetchAll();
+    $sq = $con->prepare($sql);
+	$sq->execute();
+	$result = $sq->fetchAll();
 
     return $result;
 }
@@ -271,7 +290,9 @@ function data_hutang_piutang_borongan_lain($con, $id){
 		WHERE `hutang_lain`.`id_hutang_lain` =  '$id'
 		AND h.`status` = 'Hutang'
     ";
-	$result = $con->query($sql)->fetchAll();
+    $sq = $con->prepare($sql);
+	$sq->execute();
+	$result = $sq->fetchAll();
 
     return $result;
 }
@@ -309,13 +330,13 @@ function piutang_borongan($con, $userkey, $passkey, $tipe)
 					$tgl_jeda_3 = $item['tgl_jeda_3'];
 					if ($item['tanggal'] == $tgl_jeda_30) {
 						// echo '<pre>'; print_r($item['tanggal'].' - '.$tgl_jeda_30); echo '</pre>';
-						sent_mes_to_managemnt($con, $userkey, $passkey, $item['idperum'], 30);
+						sent_mes_to_managemnt($con, $userkey, $passkey, $item['idperum'], 30, $tipe);
 					}elseif($item['tanggal'] == $tgl_jeda_14){
-						sent_mes_to_managemnt($con, $userkey, $passkey, $item['idperum'], 14);
+						sent_mes_to_managemnt($con, $userkey, $passkey, $item['idperum'], 14, $tipe);
 					}elseif($item['tanggal'] == $tgl_jeda_7){
-						sent_mes_to_managemnt($con, $userkey, $passkey, $item['idperum'], 7);
+						sent_mes_to_managemnt($con, $userkey, $passkey, $item['idperum'], 7, $tipe);
 					}elseif($item['tanggal'] == $tgl_jeda_3){
-						sent_mes_to_managemnt($con, $userkey, $passkey, $item['idperum'], 3);
+						sent_mes_to_managemnt($con, $userkey, $passkey, $item['idperum'], 3, $tipe);
 					}					
 				}
 			}
