@@ -173,9 +173,7 @@ function data_hutang_piutang_borongan_kavling($con, $id){
             p.`status`,
 			dp.`idperum`,
 			DATE_ADD(CURDATE(), INTERVAL 30 DAY) as tgl_jeda_30,
-			DATE_ADD(CURDATE(), INTERVAL 14 DAY) as tgl_jeda_14,
-			DATE_ADD(CURDATE(), INTERVAL 7 DAY) as tgl_jeda_7,
-			DATE_ADD(CURDATE(), INTERVAL 3 DAY) as tgl_jeda_3
+			DATE_ADD(CURDATE(), INTERVAL 15 DAY) as tgl_jeda_15
         FROM `pembayaran_kbk` p
         LEFT JOIN `kbk` k ON p.`idkbk` = k.`idkbk`
         LEFT JOIN `ppjb` pp ON k.`idppjb` = pp.`idppjb`
@@ -227,9 +225,7 @@ function data_hutang_piutang_borongan_falum($con, $id){
 			p.`status`,
 			dp.idperum,
 			DATE_ADD(CURDATE(), INTERVAL 30 DAY) as tgl_jeda_30,
-			DATE_ADD(CURDATE(), INTERVAL 14 DAY) as tgl_jeda_14,
-			DATE_ADD(CURDATE(), INTERVAL 7 DAY) as tgl_jeda_7,
-			DATE_ADD(CURDATE(), INTERVAL 3 DAY) as tgl_jeda_3
+			DATE_ADD(CURDATE(), INTERVAL 15 DAY) as tgl_jeda_15,
 		FROM `pembayaran_kbf` p 
 		JOIN `kbf` ON p.`idkbf`=`kbf`.`idkbf`
 		JOIN `ppjb` ON `kbf`.`idppjb`=`ppjb`.`idppjb`
@@ -279,9 +275,7 @@ function data_hutang_piutang_borongan_lain($con, $id){
 			h.`status`,
 			dp.`idperum`,
 			DATE_ADD(CURDATE(), INTERVAL 30 DAY) as tgl_jeda_30,
-			DATE_ADD(CURDATE(), INTERVAL 14 DAY) as tgl_jeda_14,
-			DATE_ADD(CURDATE(), INTERVAL 7 DAY) as tgl_jeda_7,
-			DATE_ADD(CURDATE(), INTERVAL 3 DAY) as tgl_jeda_3
+			DATE_ADD(CURDATE(), INTERVAL 15 DAY) as tgl_jeda_15
 		FROM `pembayaran_hutang_lain` h
 		JOIN `hutang_lain` ON h.`id_hutang_lain`=`hutang_lain`.`id_hutang_lain`
 		LEFT JOIN `data_perumahan` dp ON dp.`idperum` = `hutang_lain`.`id_perum`
@@ -325,19 +319,13 @@ function piutang_borongan($con, $userkey, $passkey, $tipe)
 				$perum[$key]['data_hutang'] = $data_hutang;
 				foreach ($data_hutang as $a => $item) {
 					$tgl_jeda_30 = $item['tgl_jeda_30'];
-					$tgl_jeda_14 = $item['tgl_jeda_14'];
-					$tgl_jeda_7 = $item['tgl_jeda_7'];
-					$tgl_jeda_3 = $item['tgl_jeda_3'];
+					$tgl_jeda_15 = $item['tgl_jeda_15'];
 					if ($item['tanggal'] == $tgl_jeda_30) {
 						// echo '<pre>'; print_r($item['tanggal'].' - '.$tgl_jeda_30); echo '</pre>';
 						sent_mes_to_managemnt($con, $userkey, $passkey, $item['idperum'], 30, $tipe);
-					}elseif($item['tanggal'] == $tgl_jeda_14){
-						sent_mes_to_managemnt($con, $userkey, $passkey, $item['idperum'], 14, $tipe);
-					}elseif($item['tanggal'] == $tgl_jeda_7){
-						sent_mes_to_managemnt($con, $userkey, $passkey, $item['idperum'], 7, $tipe);
-					}elseif($item['tanggal'] == $tgl_jeda_3){
-						sent_mes_to_managemnt($con, $userkey, $passkey, $item['idperum'], 3, $tipe);
-					}					
+					}elseif($item['tanggal'] == $tgl_jeda_15){
+						sent_mes_to_managemnt($con, $userkey, $passkey, $item['idperum'], 15, $tipe);
+					}				
 				}
 			}
 	    }
